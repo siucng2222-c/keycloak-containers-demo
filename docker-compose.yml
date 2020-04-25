@@ -1,0 +1,34 @@
+version: "3"
+services:
+  demo-keycloak:
+    image: demo-keycloak
+    ports:
+      - "8080:8080"
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+      - DB_VENDOR=postgres
+      - DB_ADDR=demo-keycloak-db
+      - DB_PORT=5432
+      - DB_USER=keycloak
+      - DB_PASSWORD=password
+  demo-keycloak-db:
+    image: postgres
+    ports:
+      - "65432:5432"
+    environment:
+      - POSTGRES_DB=keycloak
+      - POSTGRES_USER=keycloak
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - ./demo-keycloak-db/data:/var/lib/postgresql/data
+  demo-ldap:
+    image: demo-ldap
+  demo-js-console:
+    image: demo-js-console
+    ports:
+      - 8000:80
+networks:
+  default:
+    external:
+      name: demo-network
